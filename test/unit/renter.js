@@ -50,6 +50,15 @@ describe('Renter', function(){
     });
   });
 
+  describe('#party', function(){
+    it('should pArTy - evict tenant', function(){
+      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+      while(melanie.isEvicted === false){
+        melanie.party();
+      }
+      expect(melanie.isEvicted).to.be.true;
+    });
+  });
 
 });
 

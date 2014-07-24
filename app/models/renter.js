@@ -29,6 +29,16 @@ Renter.prototype.payRent = function(amount){
   }
 };
 
+Renter.prototype.party = function(){
+  var party = Math.floor(Math.random()*9)+1;
+  if(party < 8){
+    this.isEvicted = false;
+  }else{
+    this.isEvicted = true;
+  }
+  console.log(party);
+};
+
 
 
 module.exports = Renter;
