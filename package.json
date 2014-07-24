@@ -4,7 +4,7 @@
   "description": "Property management app (in-class exercise)",
   "main": "app/index.js",
   "scripts": {
-    "test": "mocha --recursive -R nyan"
+    "test": "mocha --recursive -R spec"
   },
   "repository": {
     "type": "git",
