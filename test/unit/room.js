@@ -25,5 +25,15 @@ describe('Room', function(){
       expect(kitchen._area).to.be.a('number');
      });
   });
+  describe('#cost', function(){
+    it('should calculate the cost of a room', function(){
+      var kitchen = new Room('kitchen', '10', '12');
+      var price = 5;
+
+      var total = kitchen.cost(price);
+      expect(total).to.equal(600);
+      expect(total).to.be.a('number');
+    });
+  });
 });
 
