@@ -4,17 +4,14 @@ function Room(name, width, length){
   this.name = name;
   this.width = parseInt(width);
   this.length = parseInt(length);
-  this._area = this.length * this.width;
 }
 
 Room.prototype.area = function(){
-  return this._area;
+  return this.length * this.width;
 };
 
-Room.prototype.cost = function(price){
-  var total = this._area * price;
-  
-  return total;
+Room.prototype.cost = function(){
+  return this.area() * 5;
 };
 
 module.exports = Room;
