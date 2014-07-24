@@ -3,17 +3,18 @@
   "version": "0.0.0",
   "description": "Simulated Property Manager wity Partying",
   "main": "app/index.js",
-  "bin": {"coveralls" : "./node_modules/coveralls/bin/coveralls.js"},
+  "bin": {
+    "coveralls": "./node_modules/coveralls/bin/coveralls.js"
+  },
   "scripts": {
     "test": "mocha test --recursive -R spec",
-    "coveralls" : "./node_modules/mocha/bin/mocha test --recursive -r blanket -R mocha-lcov-reporter | coveralls"
+    "coveralls": "./node_modules/mocha/bin/mocha test --recursive -r blanket -R mocha-lcov-reporter | coveralls"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/mlfryman/property-manager"
   },
   "author": "Melanie Fryman <melanie@frymanet.com>",
-  "contributor": "Liza H Carter <LizaHCarter@gmail.com>
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mlfryman/property-manager/issues"
