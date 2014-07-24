@@ -22,4 +22,13 @@ Renter.prototype.work = function(){
   }
 };
 
+Renter.prototype.payRent = function(amount){
+  this.cash -= amount;
+  if(this.cash < 0){
+    this.isEvicted = true;
+  }
+};
+
+
+
 module.exports = Renter;

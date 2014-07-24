@@ -24,11 +24,32 @@ describe('Renter', function(){
   describe('#work', function(){
    it('should add cash to renter', function(){
       var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+      melanie.work();
 
       expect(melanie.cash).to.be.within(3100, 15000);
       expect(melanie.cash).to.be.a('number');
     });
   });
+
+  describe('#payRent', function(){
+    it('should charge tenant rent', function(){
+      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+      melanie.work();
+      melanie.payRent(1500);
+
+      expect(melanie.cash).to.be.within(1600, 13500);
+      expect(melanie.isEvicted).to.be.false;
+    });
+    it('should evict tenant - not enough money', function(){
+      var liza = new Renter('Liza', '25', 'female', 'waiter');
+      liza.work();
+      liza.payRent(5300);
+
+      expect(liza.cash).to.be.below(0);
+      expect(liza.isEvicted).to.be.true;
+    });
+  });
+
 
 });
 
