@@ -15,8 +15,8 @@ describe('Renter', function(){
       expect(melanie.name).to.equal('Melanie');
       expect(melanie.age).to.equal(29);
       expect(melanie.gender).to.equal('female');
-      expect(melanie.cash).to.be.within(100, 5000);
-      expect(melanie.isEvicted).to.be.false;
+      expect(melanie._cash).to.be.within(100, 5000);
+      expect(melanie._isEvicted).to.be.false;
       expect(melanie.profession).to.equal('movie star');
     });
   });
@@ -26,8 +26,8 @@ describe('Renter', function(){
       var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
       melanie.work();
 
-      expect(melanie.cash).to.be.within(3100, 15000);
-      expect(melanie.cash).to.be.a('number');
+      expect(melanie._cash).to.be.within(3100, 15000);
+      expect(melanie._cash).to.be.a('number');
     });
   });
 
@@ -37,26 +37,26 @@ describe('Renter', function(){
       melanie.work();
       melanie.payRent(1500);
 
-      expect(melanie.cash).to.be.within(1600, 13500);
-      expect(melanie.isEvicted).to.be.false;
+      expect(melanie._cash).to.be.within(1600, 13500);
+      expect(melanie._isEvicted).to.be.false;
     });
     it('should evict tenant - not enough money', function(){
       var liza = new Renter('Liza', '25', 'female', 'waiter');
       liza.work();
       liza.payRent(5300);
 
-      expect(liza.cash).to.be.below(0);
-      expect(liza.isEvicted).to.be.true;
+      expect(liza._cash).to.be.below(0);
+      expect(liza._isEvicted).to.be.true;
     });
   });
 
   describe('#party', function(){
     it('should pArTy - evict tenant', function(){
       var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-      while(melanie.isEvicted === false){
+      while(melanie._isEvicted === false){
         melanie.party();
       }
-      expect(melanie.isEvicted).to.be.true;
+      expect(melanie._isEvicted).to.be.true;
     });
   });
 

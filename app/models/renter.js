@@ -6,35 +6,35 @@ function Renter(name, age, gender, profession){
   this.gender = gender;
   this.profession = profession;
 
-  this.isEvicted = false;
-  this.cash = Math.floor(Math.random() * 4900) + 100;
+  this._isEvicted = false;
+  this._cash = Math.floor(Math.random() * 4901) + 100;
 }
 
 Renter.prototype.work = function(){
   if(this.profession === 'movie star'){
-    this.cash = this.cash += (Math.floor(Math.random() * 7000)+ 3000);
+    this._cash = this._cash += (Math.floor(Math.random() * 7001)+ 3000);
   }else if(this.profession === 'coder'){
-    this.cash = this.cash += (Math.floor(Math.random() * 6000)+ 1000);
+    this._cash = this._cash += (Math.floor(Math.random() * 6001)+ 1000);
   }else if(this.profession === 'waiter'){
-    this.cash = this.cash += (Math.floor(Math.random() * 200)+ 50);
+    this._cash = this._cash += (Math.floor(Math.random() * 201)+ 50);
   }else{
-    this.cash = this.cash += (Math.floor(Math.random() * 600)+ 150);
+    this._cash = this._cash += (Math.floor(Math.random() * 601)+ 150);
   }
 };
 
 Renter.prototype.payRent = function(amount){
-  this.cash -= amount;
-  if(this.cash < 0){
-    this.isEvicted = true;
+  this._cash -= amount;
+  if(this._cash < 0){
+    this._isEvicted = true;
   }
 };
 
 Renter.prototype.party = function(){
-  var party = Math.floor(Math.random()*9)+1;
+  var party = Math.floor(Math.random()*10)+1;
   if(party < 8){
-    this.isEvicted = false;
+    this._isEvicted = false;
   }else{
-    this.isEvicted = true;
+    this._isEvicted = true;
   }
   console.log(party);
 };
