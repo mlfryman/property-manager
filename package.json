@@ -18,6 +18,7 @@
   "homepage": "https://github.com/mlfryman/property-manager",
   "dependencies": {
     "chalk": "^0.5.1",
+    "lodash": "^2.4.1",
     "mongodb": "^1.4.7",
     "require": "^0.5.0",
     "sync-prompt": "^0.4.1"
