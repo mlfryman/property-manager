@@ -26,18 +26,18 @@ describe('Apartment', function(){
       var a1 = new Apartment('A1');
       var a2 = new Apartment('A2');
       var a3 = new Apartment('A3');
-
+      //area = 610
       var r1 = new Room('bedroom', '11', '13');
       var r2 = new Room('bedroom', '11', '13');
       var r3 = new Room('living room', '16', '13');
       var r4 = new Room('kitchen', '10', '8');
       var r5 = new Room('bathroom', '6', '6');
-
+      //area = 451
       var r6 = new Room('bedroom', '11', '13');
       var r7 = new Room('living room', '19', '12');
       var r8 = new Room('kitchen', '8', '8');
       var r9 = new Room('bathroom', '4', '4');
-
+      //area = 619
       var r10 = new Room('bedroom', '10', '14');
       var r11 = new Room('bedroom', '10', '14');
       var r12 = new Room('living room', '15', '15');
@@ -257,6 +257,16 @@ describe('Apartment', function(){
       });
     });
   });
+
+  describe('#area', function(){
+    it('should return the total area of the apartment complex', function(done){
+      Apartment.area(function(area){
+        expect(area).to.equal(1680);
+        done();
+      });
+    });
+  });
+
 
 });
 

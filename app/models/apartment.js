@@ -90,6 +90,17 @@ Apartment.deleteById = function(id, cb){
   });
 };
 
+Apartment.area = function(cb){
+  Apartment.find({}, function(apts){
+    var sum = 0;
+    for(var i = 0; i < apts.length; i++){
+      sum += apts[i].area();
+    }
+    cb(sum);
+  });
+};
+
+
 // HELPER FUNCTIONS //
 
 function reProto(apt){
