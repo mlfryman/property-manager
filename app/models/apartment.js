@@ -1,16 +1,22 @@
 'use strict';
 
-var cApartment = global.mongodb.collection('apartments');
-var _ = require('lodash');
-
+var Mongo = require('mongodb');
 var Room = require('./room');
 var Renter = require('./renter');
+var _ = require('lodash');
 
 function Apartment(unit){
   this.unit = unit;
   this.rooms = [];
   this.renters = [];
 }
+
+//Create the getter to connect to Mongo
+Object.defineProperty(Apartment, 'collection', {
+  get: function(){
+    return global.mongodb.collection('apartments');
+  }
+});
 
 Apartment.prototype.area = function(){
   var totalArea = 0;
@@ -26,6 +32,10 @@ Apartment.prototype.cost = function(){
     cost += this.rooms[i].cost();
   }
   return cost;
+};
+
+Apartment.prototype.revenue = function(){
+  return (this.renters.length) ? this.cost () : 0;
 };
 
 Apartment.prototype.bedrooms = function(){
@@ -53,41 +63,40 @@ Apartment.prototype.purgeEvicted = function(){
 };
 
 Apartment.prototype.collectRent = function(){
-  if(!this.renters.length){return;}
+  if(!this.renters.length){return 0;}
 
   var rent = this.cost() / this.renters.length;
+  var collected = 0;
+
   for(var i = 0; i < this.renters.length; i++){
-    this.renters[i].payRent(rent);
+    collected += this.renters[i].payRent(rent);
   }
+  return collected;
 };
 
 Apartment.prototype.save = function(cb){
-  cApartment.save(this, function(err, obj){
-    cb();
-  });
+  //Hey, mongo!  Save this object, and callback
+  Apartment.collection.save(this, cb);
 };
 
+//a query is an object.  The object can be empty (finds ALL); if includes object in 
 Apartment.find = function(query, cb){
-  cApartment.find(query).toArray(function(err, apts){
-    for(var i = 0; i < apts.length; i++){
-      apts[i] = reProto(apts[i]);
-    }
-    cb(apts);
+  Apartment.collection.find(query).toArray(function(err, apts){
+    for(var i = 0; i < apts.length; i++){apts[i] = reProto(apts[i]);}
+    cb(err, apts);
   });
 };
 
 Apartment.findById = function(id, cb){
-  var query = {_id:id};
-  cApartment.findOne(query, function(err, apt){
-    cb(reProto(apt));
+  id = (typeof id === 'string') ? Mongo.ObjectID(id) : id;
+  Apartment.collection.findOne(q{_id:id}, function(err, apt){
+    cb(err, reProto(apt));
   });
 };
 
 Apartment.deleteById = function(id, cb){
-  var query = {_id:id};
-  cApartment.remove(query, function(){
-    cb();
-  });
+  id = (typeof id === 'string') ? Mongo.ObjectID(id) : id;
+  Apartment.collection.findAndRemove({_id:id}, cb);
 };
 
 Apartment.area = function(cb){
@@ -100,8 +109,18 @@ Apartment.area = function(cb){
   });
 };
 
+Apartment.cost = function(cb){
+  Apartment.find({}, function(apts){
+    var sum = 0;
+    for(var i = 0; i <apts.length; i++){
+      sum += apts[i].cost();
+    }
+    cb(sum);
+  });
+};
 
 // HELPER FUNCTIONS //
+// use helper when you want to reconnect instance methods
 
 function reProto(apt){
   var room, renter;

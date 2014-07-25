@@ -4,16 +4,15 @@
 'use strict';
 
 var expect = require('chai').expect;
-var Apartment;
-
+var Apartment = require('../../app/models/apartment');
 var Room = require('../../app/models/room');
 var Renter = require('../../app/models/renter');
-
-var Mongo = require('mongodb');
 var connect = require('../../app/lib/mongodb');
+var Mongo = require('mongodb');
+
+var a1, a2, a3;//creates global apartment variables
 
 describe('Apartment', function(){
-
   before(function(done){
     connect('property-manager-test', function(){
       Apartment = require('../../app/models/apartment');
@@ -23,9 +22,9 @@ describe('Apartment', function(){
 
   beforeEach(function(done){
     global.mongodb.collection('apartments').remove(function(){
-      var a1 = new Apartment('A1');
-      var a2 = new Apartment('A2');
-      var a3 = new Apartment('A3');
+      a1 = new Apartment('A1');
+      a2 = new Apartment('A2');
+      a3 = new Apartment('A3');
       //area = 610
       var r1 = new Room('bedroom', '11', '13');
       var r2 = new Room('bedroom', '11', '13');
@@ -87,7 +86,6 @@ describe('Apartment', function(){
       var r5 = new Room('bathroom', '6', '6');
       a1.rooms.push(r1, r2, r3, r4, r5);
 
-      expect(a1.rooms).to.have.length(5);
       expect(a1.area()).to.equal(610);
     });
   });
@@ -145,8 +143,9 @@ describe('Apartment', function(){
       dawn._isEvicted = true;
       a1.renters.push(willow, buffy, dawn);
 
+      expect(a1.renters).to.have.length(3);//before purge
       a1.purgeEvicted();
-      expect(a1.renters).to.have.length(2);
+      expect(a1.renters).to.have.length(2);//after purge
     });
   });
 
@@ -208,6 +207,8 @@ describe('Apartment', function(){
     });
   });
 
+  // begin ASYNC tests
+
   describe('#save', function(){
     it('should save an apartment to the mongo database', function(done){
       var a1 = new Apartment('A1');
@@ -267,6 +268,22 @@ describe('Apartment', function(){
     });
   });
 
+  describe('#cost'. function(){
+    it('should return the total cost of the apartment complex', function(done){
+      Apartment.cost(function(cost){
+        expect(cost).to.equal(8400);
+        done();
+      });
+    });
+  });
 
+ /* describe('#tenents', function(){
+   it('should return the number of tenents in the apartment complex', function(done){
+   });
+  });
+
+ describe('#revenue', function(){
+   it('should find revenue for all apartments with at least 1 renter', function(done){
+   });
+ }); */
 });
-
