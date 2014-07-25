@@ -29,7 +29,7 @@ Apartment.prototype.bedrooms = function(){
   var beds = 0;
   for(var i = 0; i < this.rooms.length; i++){
     if(this.rooms[i].isBedroom){
-    beds += 1;
+      beds += 1;
     }
   }
   return beds;
@@ -42,11 +42,20 @@ Apartment.prototype.isAvailable = function(){
 Apartment.prototype.purgeEvicted = function(){
   var notEvicted = [];
   for(var i = 0; i < this.renters.length; i++){
-    if(!this.renters[i].isEvicted){
+    if(!this.renters[i]._isEvicted){
       notEvicted.push(this.renters[i]);
     }
   }
   this.renters = notEvicted;
+};
+
+Apartment.prototype.collectRent = function(){
+  if(!this.renters.length){return;}
+
+  var rent = this.cost() / this.renters.length;
+  for(var i = 0; i < this.renters.length; i++){
+    this.renters[i].payRent(rent);
+  }
 };
 
 module.exports = Apartment;

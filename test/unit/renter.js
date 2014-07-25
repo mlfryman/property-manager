@@ -22,42 +22,64 @@ describe('Renter', function(){
   });
 
   describe('#work', function(){
-   it('should add cash to renter', function(){
+    it('should increase cash for the renter', function(){
       var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+      melanie._cash = 0;
       melanie.work();
 
-      expect(melanie._cash).to.be.within(3100, 15000);
-      expect(melanie._cash).to.be.a('number');
+      expect(melanie._cash).to.be.within(3000, 10000);
     });
   });
 
   describe('#payRent', function(){
-    it('should charge tenant rent', function(){
+    it('should pay the rent', function(){
       var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-      melanie.work();
+      melanie._cash = 2000;
       melanie.payRent(1500);
 
-      expect(melanie._cash).to.be.within(1600, 13500);
+      expect(melanie._cash).to.equal(500);
       expect(melanie._isEvicted).to.be.false;
     });
-    it('should evict tenant - not enough money', function(){
-      var liza = new Renter('Liza', '25', 'female', 'waiter');
-      liza.work();
-      liza.payRent(5300);
 
-      expect(liza._cash).to.be.below(0);
+    it('should NOT pay the rent - not enough money', function(){
+      var liza = new Renter('Liza', '25', 'female', 'waiter');
+      liza._cash = 1000;
+      liza.payRent(1500);
+
+      expect(liza._cash).to.equal(1000);
       expect(liza._isEvicted).to.be.true;
     });
   });
 
   describe('#party', function(){
-    it('should pArTy - evict tenant', function(){
-      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-      while(melanie._isEvicted === false){
+    it('should cause no disturbance - party on', function(){
+      var melanie;
+
+      while(true){
+        melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
         melanie.party();
+
+        if(!melanie._isEvicted){
+          break;
+        }
       }
+
+      expect(melanie._isEvicted).to.be.false;
+    });
+
+    it('should cause police to be called', function(){
+      var melanie;
+
+      while(true){
+        melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+        melanie.party();
+
+        if(melanie._isEvicted){
+          break;
+        }
+      }
+
       expect(melanie._isEvicted).to.be.true;
     });
   });
-
 });

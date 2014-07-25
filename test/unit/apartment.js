@@ -140,10 +140,70 @@ describe('Apartment', function(){
         var willow = new Renter('willow', '25', 'f', 'coder');
         var buffy = new Renter('buffy', '35', 'f', 'movie star');
         var dawn = new Renter('dawn', '19', 'f', 'waiter');
-        dawn.isEvicted = true;
+        dawn._isEvicted = true;
         a1.renters.push(willow, buffy, dawn);
 
         a1.purgeEvicted();
         expect(a1.renters).to.have.length(2);
       });
     });
+
+    describe('#collectRent', function(){
+      it('should deduct rent from each tenent\'s cash', function(){
+        var a1 = new Apartment('A1');
+        // Apartment rent = $4500
+        var r1 = new Room('bedroom', '10', '11');
+        var r2 = new Room('bedroom', '10', '11');
+        var r3 = new Room('bedroom', '16', '12');
+        var r4 = new Room('living room', '14', '22');
+        var r5 = new Room('kitchen', '9', '12');
+        var r6 = new Room('bathroom', '6', '6');
+        var r7 = new Room('bathroom', '6', '6');
+        var willow = new Renter('willow', '25', 'f', 'coder');
+        var buffy = new Renter('buffy', '35', 'f', 'movie star');
+        var dawn = new Renter('dawn', '19', 'f', 'waiter');
+        willow._cash = 4000;
+        buffy._cash = 4000;
+        dawn._cash = 4000;
+        a1.rooms.push(r1, r2, r3, r4, r5, r6, r7);
+        a1.renters.push(willow, buffy, dawn);
+        a1.collectRent();
+
+        expect(willow._cash).to.be.closeTo(2500, 0.02);
+        expect(willow._isEvicted).to.be.false;
+        expect(buffy._cash).to.be.closeTo(2500, 0.02);
+        expect(buffy._isEvicted).to.be.false;
+        expect(dawn._cash).to.be.closeTo(2500, 0.02);
+        expect(dawn._isEvicted).to.be.false;
+      });
+
+      it('should evict renters who cannot pay', function(){
+        var a1 = new Apartment('A1');
+        // Apartment rent = $4500
+        var r1 = new Room('bedroom', '10', '11');
+        var r2 = new Room('bedroom', '10', '11');
+        var r3 = new Room('bedroom', '16', '12');
+        var r4 = new Room('living room', '14', '22');
+        var r5 = new Room('kitchen', '9', '12');
+        var r6 = new Room('bathroom', '6', '6');
+        var r7 = new Room('bathroom', '6', '6');
+        var willow = new Renter('willow', '25', 'f', 'coder');
+        var buffy = new Renter('buffy', '35', 'f', 'movie star');
+        var dawn = new Renter('dawn', '19', 'f', 'waiter');
+        willow._cash = 4000;
+        buffy._cash = 4000;
+        dawn._cash = 1000;
+        a1.rooms.push(r1, r2, r3, r4, r5, r6, r7);
+        a1.renters.push(willow, buffy, dawn);
+        a1.collectRent();
+
+        expect(willow._cash).to.be.closeTo(2500, 0.01);
+        expect(willow._isEvicted).to.be.false;
+        expect(buffy._cash).to.be.closeTo(2500, 0.01);
+        expect(buffy._isEvicted).to.be.false;
+        expect(dawn._cash).to.equal(1000);
+        expect(dawn._isEvicted).to.be.true;
+      });
+    });
+
+
