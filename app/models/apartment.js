@@ -36,7 +36,7 @@ Apartment.prototype.bedrooms = function(){
 };
 
 Apartment.prototype.isAvailable = function(){
-  return this.bedrooms > this.renters.length;
+  return this.bedrooms() > this.renters.length;
 };
 
 

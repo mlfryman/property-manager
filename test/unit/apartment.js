@@ -1,4 +1,4 @@
-/* global describe, it, before, beforeEach */
+/* global describe, it */
 /* jshint expr:true */
 
 'use strict';
@@ -19,8 +19,8 @@ describe('Apartment', function(){
 //    });
 //  });
 
-//  beforeEach(function(done){
-    //global.mongodb.collection('apartments').remove(function(){
+/*  beforeEach(function(done){
+    global.mongodb.collection('apartments').remove(function(){
       var a1 = new Apartment('A1');
       var a2 = new Apartment('A2');
       var a3 = new Apartment('A3');
@@ -61,7 +61,7 @@ describe('Apartment', function(){
 //            done();
 //          });
 //        });
-//      });
+      });*/
     });
 
     describe('constructor', function(){
@@ -119,7 +119,7 @@ describe('Apartment', function(){
     });
 
     describe('#isAvailable', function(){
-      it('should notify manager if an apartment room is available to sublet', function(){
+      it('should notify manager if an apartment bedroom is available to sublet', function(){
         var a1 = new Apartment('A1');
         var r1 = new Room('bedroom', '11', '13');
         var r2 = new Room('bedroom', '11', '13');
