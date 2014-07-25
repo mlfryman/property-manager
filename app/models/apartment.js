@@ -39,5 +39,14 @@ Apartment.prototype.isAvailable = function(){
   return this.bedrooms() > this.renters.length;
 };
 
+Apartment.prototype.purgeEvicted = function(){
+  var notEvicted = [];
+  for(var i = 0; i < this.renters.length; i++){
+    if(!this.renters[i].isEvicted){
+      notEvicted.push(this.renters[i]);
+    }
+  }
+  this.renters = notEvicted;
+};
 
 module.exports = Apartment;

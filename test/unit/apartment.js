@@ -133,3 +133,17 @@ describe('Apartment', function(){
         expect(a1.isAvailable()).to.be.true;
       });
     });
+
+    describe('#purgeEvicted', function(){
+      it('should remove evicted tenents from apartment renters array', function(){
+        var a1 = new Apartment('A1');
+        var willow = new Renter('willow', '25', 'f', 'coder');
+        var buffy = new Renter('buffy', '35', 'f', 'movie star');
+        var dawn = new Renter('dawn', '19', 'f', 'waiter');
+        dawn.isEvicted = true;
+        a1.renters.push(willow, buffy, dawn);
+
+        a1.purgeEvicted();
+        expect(a1.renters).to.have.length(2);
+      });
+    });
