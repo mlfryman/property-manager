@@ -117,3 +117,19 @@ describe('Apartment', function(){
         expect(a1.bedrooms()).to.equal(2);
       });
     });
+
+    describe('#isAvailable', function(){
+      it('should notify manager if an apartment room is available to sublet', function(){
+        var a1 = new Apartment('A1');
+        var r1 = new Room('bedroom', '11', '13');
+        var r2 = new Room('bedroom', '11', '13');
+        var r3 = new Room('living room', '16', '13');
+        var r4 = new Room('kitchen', '10', '8');
+        var r5 = new Room('bathroom', '6', '6');
+        var anya = new Renter('anya', '45', 'f', 'social worker');
+        a1.rooms.push(r1, r2, r3, r4, r5);
+        a1.renters.push(anya);
+
+        expect(a1.isAvailable()).to.be.true;
+      });
+    });
