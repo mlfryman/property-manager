@@ -1,5 +1,7 @@
 'use strict';
-//var Room = require('./room.js');
+
+//var Room = require('./room');
+//var Renter = require('./renter');
 
 function Apartment(unit){
   this.unit = unit;
@@ -8,15 +10,30 @@ function Apartment(unit){
 }
 
 Apartment.prototype.area = function(){
-  var total = 0;
+  var totalArea = 0;
   for(var i = 0; i < this.rooms.length; i++){
-    total += (this.rooms[i].length * this.rooms[i].width);
+    totalArea += (this.rooms[i].length * this.rooms[i].width);
   }
-  return total;
+  return totalArea;
 };
 
 Apartment.prototype.cost = function(){
-  return this.area() * 5;
+  var cost = 0;
+  for (var i = 0; i < this.rooms.length; i++){
+    cost += this.rooms[i].cost();
+  }
+  return cost;
 };
+
+Apartment.prototype.bedrooms = function(){
+  var beds = 0;
+  for(var i = 0; i < this.rooms.length; i++){
+    if(this.rooms[i].isBedroom){
+    beds += 1;
+    }
+  }
+  return beds;
+};
+
 
 module.exports = Apartment;
