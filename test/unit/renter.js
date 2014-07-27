@@ -3,83 +3,82 @@
 'use strict';
 
 var expect = require('chai').expect;
-
 var Renter = require('../../app/models/renter.js');
 
 describe('Renter', function(){
   describe('constructor', function(){
-    it('should create a renter', function(){
-      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
+    it('should create a new Renter object', function(){
+      var buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
 
-      expect(melanie).to.be.instanceof(Renter);
-      expect(melanie.name).to.equal('Melanie');
-      expect(melanie.age).to.equal(29);
-      expect(melanie.gender).to.equal('female');
-      expect(melanie._cash).to.be.within(100, 5000);
-      expect(melanie._isEvicted).to.be.false;
-      expect(melanie.profession).to.equal('movie star');
+      expect(buffy).to.be.instanceof(Renter);
+      expect(buffy.name).to.equal('Buffy Summers');
+      expect(buffy.age).to.equal(35);
+      expect(buffy.gender).to.equal('f');
+      expect(buffy._cash).to.be.within(100, 5000);
+      expect(buffy._isEvicted).to.be.false;
+      expect(buffy.profession).to.equal('movie star');
     });
   });
 
   describe('#work', function(){
     it('should increase cash for the renter', function(){
-      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-      melanie._cash = 0;
-      melanie.work();
+      var buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
+      buffy._cash = 0;
+      buffy.work();
 
-      expect(melanie._cash).to.be.within(3000, 10000);
+      expect(buffy._cash).to.be.within(3000, 10000);
     });
   });
 
   describe('#payRent', function(){
     it('should pay the rent', function(){
-      var melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-      melanie._cash = 2000;
-      melanie.payRent(1500);
+      var buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
+      buffy._cash = 2000;
+      buffy.payRent('1500');
 
-      expect(melanie._cash).to.equal(500);
-      expect(melanie._isEvicted).to.be.false;
+      expect(buffy._cash).to.equal(500);
+      expect(buffy._isEvicted).to.be.false;
     });
 
     it('should NOT pay the rent - not enough money', function(){
-      var liza = new Renter('Liza', '25', 'female', 'waiter');
-      liza._cash = 1000;
-      liza.payRent(1500);
+      var buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
+      buffy._cash = 1000;
+      buffy.payRent('1500');
 
-      expect(liza._cash).to.equal(1000);
-      expect(liza._isEvicted).to.be.true;
+      expect(buffy._cash).to.equal(1000);
+      expect(buffy._isEvicted).to.be.true;
     });
   });
 
   describe('#party', function(){
     it('should cause no disturbance - party on', function(){
-      var melanie;
+      var buffy;
 
       while(true){
-        melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-        melanie.party();
+        buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
+        buffy.party();
 
-        if(!melanie._isEvicted){
+        if(!buffy._isEvicted){
           break;
         }
       }
 
-      expect(melanie._isEvicted).to.be.false;
+      expect(buffy._isEvicted).to.be.false;
     });
 
-    it('should cause police to be called', function(){
-      var melanie;
+    it('should cause police to be called & evict renter', function(){
+      var buffy;
 
       while(true){
-        melanie  = new Renter ('Melanie', '29', 'female', 'movie star');
-        melanie.party();
+        buffy = new Renter('Buffy Summers', '35', 'f', 'movie star');
+        buffy.party();
 
-        if(melanie._isEvicted){
+        if(buffy._isEvicted){
           break;
         }
       }
 
-      expect(melanie._isEvicted).to.be.true;
+      expect(buffy._isEvicted).to.be.true;
     });
   });
 });

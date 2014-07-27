@@ -27,15 +27,23 @@ Renter.prototype.work = function(){
 };
 
 Renter.prototype.payRent = function(rent){
-  if(this._isEvicted){return;}
+  if(this.isEvicted){return 0;}
 
   rent = parseInt(rent);
   this._isEvicted = this._cash < rent;
-  if(!this._isEvicted){this._cash -= rent;}
+
+  if(!this._isEvicted){
+    this._cash -= rent;
+    return rent;
+  }
+
+  return 0;
 };
 
 Renter.prototype.party = function(){
-  if(this._isEvicted){return;}
+  if(this._isEvicted){
+    return;
+  }
 
   var volume = Math.floor(Math.random() * 10) + 1;
   this._isEvicted = volume > 8;

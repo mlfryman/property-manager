@@ -4,7 +4,6 @@ function Room(name, width, length){
   this.name = name;
   this.width = parseInt(width);
   this.length = parseInt(length);
-  //this.isBedroom = (this.name === 'bedroom');
 }
 
 Room.prototype.area = function(){
@@ -16,7 +15,7 @@ Room.prototype.cost = function(){
 };
 
 Room.prototype.isBedroom = function(){
-  this.isBedroom = (this.name === 'bedroom');
+  return this.name === 'bedroom';
 };
 
 module.exports = Room;

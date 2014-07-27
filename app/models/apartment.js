@@ -19,19 +19,19 @@ Object.defineProperty(Apartment, 'collection', {
 });
 
 Apartment.prototype.area = function(){
-  var totalArea = 0;
+  var aptArea = 0;
   for(var i = 0; i < this.rooms.length; i++){
-    totalArea += (this.rooms[i].length * this.rooms[i].width);
+    aptArea += (this.rooms[i].length * this.rooms[i].width);
   }
-  return totalArea;
+  return aptArea;
 };
 
 Apartment.prototype.cost = function(){
-  var cost = 0;
+  var aptCost = 0;
   for (var i = 0; i < this.rooms.length; i++){
-    cost += this.rooms[i].cost();
+    aptCost += this.rooms[i].cost();
   }
-  return cost;
+  return aptCost;
 };
 
 Apartment.prototype.revenue = function(){
@@ -40,11 +40,11 @@ Apartment.prototype.revenue = function(){
 
 Apartment.prototype.bedrooms = function(){
   var beds = 0;
+
   for(var i = 0; i < this.rooms.length; i++){
-    if(this.rooms[i].isBedroom){
-      beds += 1;
-    }
+    beds += this.rooms[i].isBedroom() ? 1 : 0;
   }
+
   return beds;
 };
 
@@ -63,7 +63,16 @@ Apartment.prototype.purgeEvicted = function(){
 };
 
 Apartment.prototype.collectRent = function(){
-  if(!this.renters.length){return 0;}
+  if(!this.renters.length){return;}
+
+  var rent = this.cost() / this.renters.length;
+  for(var i = 0; i < this.renters.length; i++){
+    this.renters[i].payRent(rent);
+  }
+};
+
+Apartment.prototype.collectRent = function(){
+  if(!this.renters.length){return;}
 
   var rent = this.cost() / this.renters.length;
   var collected = 0;
@@ -71,26 +80,28 @@ Apartment.prototype.collectRent = function(){
   for(var i = 0; i < this.renters.length; i++){
     collected += this.renters[i].payRent(rent);
   }
+
   return collected;
 };
 
 Apartment.prototype.save = function(cb){
-  //Hey, mongo!  Save this object, and callback
   Apartment.collection.save(this, cb);
 };
 
 //a query is an object.  The object can be empty (finds ALL); if includes object in 
 Apartment.find = function(query, cb){
   Apartment.collection.find(query).toArray(function(err, apts){
-    for(var i = 0; i < apts.length; i++){apts[i] = reProto(apts[i]);}
+    for(var i = 0; i < apts.length; i++){
+      apts[i] = repairPrototype(apts[i]);
+    }
     cb(err, apts);
   });
 };
 
 Apartment.findById = function(id, cb){
   id = (typeof id === 'string') ? Mongo.ObjectID(id) : id;
-  Apartment.collection.findOne(q{_id:id}, function(err, apt){
-    cb(err, reProto(apt));
+  Apartment.collection.findOne({_id:id}, function(err, apt){
+    cb(err, repairPrototype(apt));
   });
 };
 
@@ -100,41 +111,68 @@ Apartment.deleteById = function(id, cb){
 };
 
 Apartment.area = function(cb){
-  Apartment.find({}, function(apts){
+  Apartment.find({}, function(err, apts){
     var sum = 0;
+
     for(var i = 0; i < apts.length; i++){
       sum += apts[i].area();
     }
+
     cb(sum);
   });
 };
 
 Apartment.cost = function(cb){
-  Apartment.find({}, function(apts){
+  Apartment.find({}, function(err, apts){
     var sum = 0;
+
     for(var i = 0; i <apts.length; i++){
       sum += apts[i].cost();
     }
+
     cb(sum);
   });
 };
 
+Apartment.revenue = function(cb){
+  Apartment.find({}, function(err, apts){
+    var sum = 0;
+
+    for(var i = 0; i < apts.length; i++){
+      sum += apts[i].revenue();
+    }
+
+    cb(sum);
+  });
+};
+
+Apartment.tenents = function(cb){
+  Apartment.find({}, function(err, apts){
+    var sum = 0;
+
+    for(var i = 0; i < apts.length; i++){
+      sum += apts[i].renters.length;
+    }
+
+    cb(sum);
+  });
+};
+
+module.exports = Apartment;
+
 // HELPER FUNCTIONS //
 // use helper when you want to reconnect instance methods
 
-function reProto(apt){
-  var room, renter;
-  for(var i = 0; i < apt.rooms.length; i++){
-    room = _.create(Room.prototype, apt.rooms[i]);
-    apt.rooms[i] = room;
-  }
-  for(var j = 0; j < apt.renters.length; j++){
-    renter = _.create(Renter.prototype, apt.renters[j]);
-    apt.renters[j] = renter;
-  }
+function repairPrototype(apt){
   apt = _.create(Apartment.prototype, apt);
+
+  for(var i = 0; i < apt.rooms.length; i++){
+    apt.rooms[i] = _.create(Room.prototype, apt.rooms[i]);
+  }
+
+  for(var j = 0; j < apt.renters.length; j++){
+    apt.renters[j] = _.create(Renter.prototype, apt.renters[j]);
+  }
 
   return apt;
 }
-
-module.exports = Apartment;
