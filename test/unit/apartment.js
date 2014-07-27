@@ -111,9 +111,6 @@ describe('Apartment', function(){
       a1.renters[0]._cash = 10000;
       a1.renters[1]._cash = 7000;
       var collected = a1.collectRent();
-      console.log('Cost of A1: ' + a1.cost());
-      console.log('Renters in A1: ' + a1.renters.length);
-      console.log('Rent collected from A1: ' + a1.collectRent());
       expect(collected).to.be.closeTo(3765, 1);
 
       a1.renters[0]._cash = 10000;
