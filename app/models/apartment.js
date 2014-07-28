@@ -148,7 +148,7 @@ Apartment.revenue = function(cb){
   });
 };
 
-Apartment.tenents = function(cb){
+Apartment.tenants = function(cb){
   Apartment.find({}, function(err, apts){
     var sum = 0;
 

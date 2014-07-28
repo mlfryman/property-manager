@@ -95,7 +95,7 @@ describe('Apartment', function(){
   });
 
   describe('#purgeEvicted', function(){
-    it('should purge evicted tenents from apartment', function(){
+    it('should purge evicted tenants from apartment', function(){
       var dawn = new Renter('dawn', '19', 'f', 'waiter');
       dawn._isEvicted = true;
       a1.renters.push(dawn);
@@ -107,7 +107,7 @@ describe('Apartment', function(){
   });
 
   describe('#collectRent', function(){
-    it('should collect rent from tenents', function(){
+    it('should collect rent from tenants', function(){
       a1.renters[0]._cash = 10000;
       a1.renters[1]._cash = 7000;
       var collected = a1.collectRent();
@@ -209,10 +209,10 @@ describe('Apartment', function(){
     });
   });
 
-  describe('.tenents', function(){
-    it('should find all tenents in apartment complex', function(done){
-      Apartment.tenents(function(tenents){
-        expect(tenents).to.equal(2);
+  describe('.tenants', function(){
+    it('should find all tenants in apartment complex', function(done){
+      Apartment.tenants(function(tenants){
+        expect(tenants).to.equal(2);
         done();
       });
     });
